@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class HospitalUpdate {
+public class SchoolDelete {
     public static void main(String[] args) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -14,16 +14,15 @@ public class HospitalUpdate {
             e.printStackTrace();
         }
 
-        String query = "UPDATE hospital_details SET totalDoctor = ? WHERE idhospital_details =? ";
-
+        String query = "DELETE FROM school_details WHERE teacher_name=? AND school_id = ?";
         Connection connection = null;
 
         PreparedStatement ps=null;
 
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital", "root","neha");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/school", "root","neha");
             ps =connection.prepareStatement(query);
-            ps.setInt(1, 110);
+            ps.setString(1, "Tania");
             ps.setInt(2,102);
 
             int num=ps.executeUpdate();
@@ -32,7 +31,8 @@ public class HospitalUpdate {
 
 
 
-        } catch (SQLException e) {
+        } catch (
+                SQLException e) {
 
             throw  new RuntimeException(e);
         } finally {
@@ -40,7 +40,7 @@ public class HospitalUpdate {
                 try {
                     connection.close();
                 } catch (SQLException e) {
-
+                    //e.printStackTrace();
                     throw  new RuntimeException(e);
                 }
             }
@@ -54,7 +54,5 @@ public class HospitalUpdate {
         }
     }
 }
-
-
 
 

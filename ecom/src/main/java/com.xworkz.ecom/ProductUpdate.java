@@ -1,9 +1,6 @@
 package com.xworkz.ecom;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class ProductUpdate {
     public static void main(String[] args) {
@@ -13,30 +10,43 @@ public class ProductUpdate {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        String url = ("jdbc:mysql://localhost:3306/products");
-        String username = "root";
-        String pws = "neha";
-        String query = ("UPDATE products_details\n" +
-                "SET discount = 5\n" +
-                "WHERE products_id =101 ");
+
+        String query = " UPDATE products_details SET discount = ? WHERE products_id = ?";
 
         Connection connection = null;
-        Statement statement = null;
+
+        PreparedStatement ps=null;
 
         try {
-            connection = DriverManager.getConnection(url, username, pws);
-            statement = connection.createStatement();
-            boolean ref = statement.execute(query);
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/products", "root","neha");
+            ps =connection.prepareStatement(query);
+            ps.setInt(1, 5);
+            ps.setInt(2,101);
+
+            int num=ps.executeUpdate();
+            System.out.println("to check"+num);
+
 
         } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        if (statement != null) {
-            try {
-                statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+
+            throw  new RuntimeException(e);
+        } finally {
+            if (connection!= null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+
+                    throw  new RuntimeException(e);
+                }
+            }
+            if(ps != null){
+                try {
+                    ps.close();
+                }catch (SQLException e){
+                    throw  new RuntimeException(e);
+                }
             }
         }
     }
 }
+

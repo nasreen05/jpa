@@ -1,9 +1,6 @@
 package org.example;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class SchoolUpdate {
     public static void main(String[] args) {
@@ -13,33 +10,46 @@ public class SchoolUpdate {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        String url = ("jdbc:mysql://localhost:3306/school");
-        String username = "root";
-        String pws = "neha";
-        String query = ("UPDATE school_details \n" +
-                "SET teacher_name =\"Nasreen\"\n" +
-                "WHERE school_id = 105");
 
+        String query = " UPDATE school_details SET teacher_name =? WHERE school_id = ?";
         Connection connection = null;
-        Statement statement = null;
+
+        PreparedStatement ps=null;
 
         try {
-            connection = DriverManager.getConnection(url, username, pws);
-            statement = connection.createStatement();
-            boolean ref = statement.execute(query);
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/school", "root","neha");
+            ps =connection.prepareStatement(query);
+            ps.setString(1,"Tania");
+            ps.setInt(2,102);
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        if (statement != null) {
-            try {
-                statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            int num=ps.executeUpdate();
+            System.out.println("to check"+num);
+
+
+
+
+        } catch (
+                SQLException e) {
+
+            throw  new RuntimeException(e);
+        } finally {
+            if (connection!= null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    //e.printStackTrace();
+                    throw  new RuntimeException(e);
+                }
+            }
+            if(ps != null){
+                try {
+                    ps.close();
+                }catch (SQLException e){
+                    throw  new RuntimeException(e);
+                }
             }
         }
     }
 }
-
 
 

@@ -1,8 +1,5 @@
 package org.example;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class MainUpdate {
     public static void main(String[] args) {
@@ -12,31 +9,41 @@ public class MainUpdate {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        String url = ("jdbc:mysql://localhost:3306/collage");
-        String username = "root";
-        String pws = "neha";
-        String query = ("UPDATE collage_details \n" +
-                "SET fees = 8760 \n" +
-                "WHERE collage_id = 101");
+
+        String query = " UPDATE collage_details SET fees = ? WHERE collage_id = ?";
 
         Connection connection = null;
-        Statement statement = null;
 
-            try {
-                connection = DriverManager.getConnection(url, username, pws);
-                statement = connection.createStatement();
-                boolean ref = statement.execute(query);
+        PreparedStatement ps=null;
 
-            } catch (SQLException e) {
-                e.printStackTrace();
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/collage", "root","neha");
+            ps =connection.prepareStatement(query);
+            ps.setInt(1, 98760);
+            ps.setInt(2,102);
+
+            int num=ps.executeUpdate();
+            System.out.println("to check"+num);
+
+        } catch (SQLException e) {
+
+            throw  new RuntimeException(e);
+        } finally {
+            if (connection!= null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    //e.printStackTrace();
+                    throw  new RuntimeException(e);
+                }
             }
-        if (statement != null) {
-            try {
-                statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            if(ps != null){
+                try {
+                    ps.close();
+                }catch (SQLException e){
+                    throw  new RuntimeException(e);
+                }
             }
         }
     }
 }
-
