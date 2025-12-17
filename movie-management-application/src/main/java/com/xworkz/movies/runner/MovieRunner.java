@@ -20,16 +20,16 @@ public class MovieRunner {
 
 
         try{
-        emf = Persistence.createEntityManagerFactory("something");
-        System.out.println("EntityManagerFactory create : " + emf);
-        em = emf.createEntityManager(); // DML insert, update, delete, DQL select
-        et = em.getTransaction();
-        et.begin();  // set auto commit to false
-        // DML insert , update , delete , DQL select
-        em.persist(firstMovie);
-        System.out.println("Movie date inserted");
-        et.commit();
-    } catch (PersistenceException e) {
+            emf = Persistence.createEntityManagerFactory("something");
+            System.out.println("EntityManagerFactory create : " + emf);
+            em = emf.createEntityManager(); // DML insert, update, delete, DQL select
+            et = em.getTransaction();
+            et.begin();  // set auto commit to false
+            // DML insert , update , delete , DQL select
+            em.persist(firstMovie);
+            System.out.println("Movie date inserted");
+            et.commit();
+        } catch (PersistenceException e) {
             e.printStackTrace();
             et.rollback();
         }finally {
