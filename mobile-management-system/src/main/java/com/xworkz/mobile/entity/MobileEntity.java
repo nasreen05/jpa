@@ -6,30 +6,31 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
-    @Getter
-    @Setter
-    @ToString
-    @Entity
-    @Table(name = "mobile_info")
-    public class MobileEntity {
+@Setter
+@Getter
+@ToString
+@Entity
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "mobile_id")
-        private int mobileId;
+@Table(name = "mobile_info")
+public class MobileEntity {
 
-        @Column(name = "name")
-        private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "mobile_id")
+    private int mobileId;
 
-        @Column(name = "brand")
-        private String brand;
+    @Column(name = "name")
+    private String name;
 
-        @Column(name = "price")
-        private double price;
+    @Column(name = "brand")
+    private String brand;
 
-        @Column(name = "quantity")
-        private int quantity;
+    @Column(name = "price")
+    private double price;
 
-        @Column(name = "mfd")
-        private String mfd;
-    }
+    @Column(name = "quantity")
+    private int quantity;
+
+    @Column(name = "mfd")
+    private String mfd;
+}

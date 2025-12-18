@@ -1,6 +1,5 @@
 package com.xworkz.mobile.repository;
 
-
 import com.xworkz.mobile.entity.MobileEntity;
 
 import javax.persistence.EntityManager;
@@ -21,7 +20,7 @@ public class MobileRepositoryImpl implements MobileRepository {
         EntityTransaction et = null;
 
         try {
-            emf = Persistence.createEntityManagerFactory("mobile");
+            emf = Persistence.createEntityManagerFactory("something");
             em = emf.createEntityManager();
             et = em.getTransaction();
             et.begin();
@@ -49,6 +48,78 @@ public class MobileRepositoryImpl implements MobileRepository {
         }
         return isSaved;
 
+    }
+
+    @Override
+    public boolean updatePriceQuantityMfdById(double price, int quantity, String mfd, int id) {
+        System.out.println("Invoking updatePriceQuantityMfdById in RepositoryImpl");
+        boolean isUpdate = false;
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction et = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("something");
+            em = emf.createEntityManager();
+            et = em.getTransaction();
+            et.begin();
+            MobileEntity entity = em.find(MobileEntity.class, id);
+            if (entity != null) {
+                entity.setPrice(price);
+                entity.setQuantity(quantity);
+                entity.setMfd(mfd);
+                em.merge(entity);
+                et.commit();
+                isUpdate = true;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            et.rollback();
+            isUpdate = false;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+            if (emf != null) {
+                emf.close();
+            }
+        }
+        return isUpdate;
+    }
+
+    @Override
+    public MobileEntity updateAllDetailsById(MobileEntity entity) {
+        System.out.println("Updated using Id");
+        MobileEntity isUpdated = null;
+        EntityManager em = null;
+        EntityTransaction et = null;
+        EntityManagerFactory emf = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("something");
+            em = emf.createEntityManager();
+            et = em.getTransaction();
+            et.begin();
+            MobileEntity mobileEntity = em.find(MobileEntity.class, 2);
+            mobileEntity.setName(entity.getName());
+            mobileEntity.setBrand(entity.getBrand());
+            mobileEntity.setPrice(entity.getPrice());
+            mobileEntity.setQuantity(entity.getQuantity());
+            mobileEntity.setMfd(entity.getMfd());
+            et.commit();
+            isUpdated= em.merge(mobileEntity);
+            System.out.println("data updated");
+        } catch (Exception e) {
+            e.printStackTrace();
+            et.rollback();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+            if (emf != null) {
+                emf.close();
+            }
+        }
+        return isUpdated;
     }
 
 }
